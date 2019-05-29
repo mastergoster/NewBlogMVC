@@ -29,16 +29,13 @@ class Router
             ob_start();
             $params = $match['params'];
             require $this->pathToFile($match['target']);
-            //require $this->viewPath . DIRECTORY_SEPARATOR . $match['target'] . '.php';
-            $content = ob_get_clean();
-            require $this->pathToFile("layout/default");
-            //require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/default.php';
-            exit();
         } else {
             // no route was matched
             header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-            exit();
+            require $this->pathToFile("layout/404");
         }
+        $content = ob_get_clean();
+        require $this->pathToFile("layout/default");
     }
 
     private function pathToFile(string $file): string
