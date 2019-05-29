@@ -22,15 +22,15 @@ class Router
     public function run(): void
     {
         $match = $this->router->match();
-        if (is_array($match)) {
 
+        if (is_array($match)) {
             ob_start();
             $params = $match['params'];
             require $this->viewPath . DIRECTORY_SEPARATOR . $match['target'] . '.php';
             $content = ob_get_clean();
+            //dd($content);
             require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/default.php';
             exit();
-            //call_user_func_array($match['target'], $match['params']);
         } else {
             // no route was matched
             header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
