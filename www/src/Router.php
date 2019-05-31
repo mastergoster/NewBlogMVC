@@ -24,9 +24,8 @@ class Router
     public function run(): void
     {
         $match = $this->router->match();
-
+        ob_start();
         if (is_array($match)) {
-            ob_start();
             $params = $match['params'];
             require $this->pathToFile($match['target']);
         } else {
