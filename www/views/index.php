@@ -1,4 +1,6 @@
 <?php
+use App\Model\Post;
+use App\Helpers\Text;
 
 
 $pdo = new PDO(
@@ -27,11 +29,15 @@ if (isset($_GET["page"])) {
 }
 $offset = ($currentpage - 1) * $perPage;
 
-$posts = $pdo->query("SELECT * FROM post 
+$statement = $pdo->query("SELECT * FROM post 
                     ORDER BY id 
                     LIMIT {$perPage} 
-                    OFFSET {$offset}")
-    ->fetchAll(PDO::FETCH_OBJ);
+                    OFFSET {$offset}");
+
+$statement->setFetchMode(PDO::FETCH_CLASS, Post::class);
+
+$posts =   $statement->fetchAll();
+
 
 
 $title = 'Mon Super MEGA blog';
@@ -43,16 +49,21 @@ $title = 'Mon Super MEGA blog';
     </div>
 <?php endif ?>
 <section class="row">
-    <?php foreach ($posts as $post) : ?>
+    <?php /** @var Post::class $post */
+    foreach ($posts as $post) :
+        //var_dump($post);
+        //die();
+        ?>
         <article class="col-3 mb-4 d-flex align-items-stretch">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><?= $post->name ?></h5>
-                    <p class="card-text"><?= substr($post->content, 0, 100) ?>...</p>
+                    <h5 class="card-title"><?= $post->getName() ?></h5>
+                    <p class="card-text"><?= Text::excerpt($post->getContent(), 200) ?></p>
+
                 </div>
-                <a href="/article/<?= $post->slug ?>-<?= $post->id ?>" class="text-center pb-2">lire plus</a>
+                <a href="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]) ?>" class="text-center pb-2">lire plus</a>
                 <div class="card-footer text-muted">
-                    <?= (new DateTime($post->created_at))->format('d/m/Y h:i')   ?>
+                    <?= $post->getCreatedAt()->format('d/m/Y h:i')   ?>
                 </div>
             </div>
         </article>

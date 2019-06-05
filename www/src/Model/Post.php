@@ -1,0 +1,58 @@
+<?php
+namespace App\Model;
+
+class Post
+{
+    private $id;
+
+    private $name;
+
+    private $slug;
+
+    private $content;
+
+    private $created_at;
+
+    private $categories = [];
+
+    /**
+     * Get the value of id
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the value of name
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the value of slug
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * Get the value of content
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Get the value of created_at
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return new \DateTime($this->created_at);
+    }
+}

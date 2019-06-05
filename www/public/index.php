@@ -1,4 +1,5 @@
 <?php
+define("GENERATE_TIME_START", microtime(true));
 $basePath = dirname(__dir__) . DIRECTORY_SEPARATOR;
 
 require_once $basePath . 'vendor/autoload.php';
@@ -29,5 +30,6 @@ $router = new App\Router($basePath . 'views');
 
 $router->get('/', 'index', 'home')
     ->get('/categories', 'categories', 'categories')
+    ->get('/category/[*:slug]-[i:id]', 'category', 'category')
     ->get('/article/[*:slug]-[i:id]', 'post/index', 'post')
     ->run();

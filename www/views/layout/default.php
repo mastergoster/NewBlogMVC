@@ -45,7 +45,16 @@
     </section>
     <footer class="footer bg-dark fixed-bottom py-1">
         <div class="text-center">
-            <span class="text-white">by julien</span>
+            <?php
+            $debug = "";
+            if (getenv("ENV_DEV")) {
+                $end = microtime(true);
+                $generationtime = number_format(($end - GENERATE_TIME_START) * 1000, 2);
+                $debug = " - Page générée en " . $generationtime . " ms";
+            }
+
+            ?>
+            <span class="text-white">By julien<?= $debug ?></span>
         </div>
     </footer>
 </body>

@@ -20,10 +20,15 @@ class Router
         return $this;
     }
 
+    public function url(string $name, array $params = []): string
+    {
+        return $this->router->generate($name, $params);
+    }
 
     public function run(): void
     {
         $match = $this->router->match();
+        $router = $this;
         ob_start();
         if (is_array($match)) {
             $params = $match['params'];
