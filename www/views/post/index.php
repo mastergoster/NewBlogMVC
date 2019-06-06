@@ -1,66 +1,59 @@
 <?php
-use App\Model \ {
-    Post,
-    Category
-};
+use App\Model\Post;
 use App\Connection;
-
-$id = (int)$params['id'];
-$slug = $params['slug'];
-
 
 $pdo = Connection::getPDO();
 
-$statement = $pdo->prepare("SELECT * FROM post WHERE id=?");
-$statement->execute([$id]);
+
+
+
+$nbpost = $pdo->query('SELECT count(id) FROM post')->fetch()[0];
+$perPage = 12;
+$nbPage = ceil($nbpost / $perPage);
+
+if ((int)$_GET["page"] > $nbPage) {
+    throw new Exception('pas de pages');
+}
+
+if (isset($_GET["page"])) {
+    $currentpage = (int)$_GET["page"];
+} else {
+    $currentpage = 1;
+}
+$offset = ($currentpage - 1) * $perPage;
+
+$statement = $pdo->query("SELECT * FROM post 
+                    ORDER BY id 
+                    LIMIT {$perPage} 
+                    OFFSET {$offset}");
+
 $statement->setFetchMode(PDO::FETCH_CLASS, Post::class);
-/** @var Post|false */
-$post = $statement->fetch();
 
-if (!$post) {
-    throw new Exception('Aucun article ne correspond à cet ID');
-}
-
-if ($post->getSlug() !== $slug) {
-    $url = $router->url(
-        'post',
-        [
-            'id' => $id,
-            'slug' => $post->getSlug()
-        ]
-    );
-    http_response_code(301);
-    header('Location: ' . $url);
-    exit();
-}
+$posts =   $statement->fetchAll();
 
 
-$query = $pdo->prepare('
-SELECT c.id, c.slug, c.name
-FROM post_category pc
-JOIN category c ON pc.category_id = c.id
-WHERE pc.post_id = :id
-');
-$query->execute([':id' => $post->getId()]);
-$query->setFetchMode(PDO::FETCH_CLASS, Category::class);
-/** @var Category[] */
-$categories = $query->fetchAll();
-$title = "article : " . $post->getName();
+
+$title = 'Mon Super MEGA blog';
 ?>
 
-
-<div class="text-muted text-center pb-5 mb-5">
-    <?= $post->getCreatedAt()->format('d/m/Y h:i') ?><br />
-    <?php foreach ($categories as $key => $category) :
-        if ($key > 0) {
-            echo ', ';
-        }
-        $category_url = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]);
-        ?><a href="<?= $category_url ?>"><?= $category->getName() ?></a><?php endforeach; ?>
-</div>
-<p class="mx-4 text-justify"><?= nl2br(htmlspecialchars($post->getContent())) ?></p>
-
-
-
-</div>
-</div>
+<?php if (null !== $message) : ?>
+    <div class="alert-message">
+        <?= $message ?>
+    </div>
+<?php endif ?>
+<section class="row">
+    <?php /** @var Post::class $post */
+    foreach ($posts as $post) {
+        require 'card.php';
+    }
+    ?>
+</section>
+<nav class="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php for ($i = 1; $i <= $nbPage; $i++) : ?>
+            <?php $class = $currentpage == $i ? " active" : ""; ?>
+            <?php $uri = $i == 1 ? "" : "?page=" . $i; ?>
+            <li class="page-item<?= $class ?>"><a class="page-link" href="/<?= $uri ?>"><?= $i ?></a></li>
+        <?php endfor ?>
+    </ul>
+</nav>

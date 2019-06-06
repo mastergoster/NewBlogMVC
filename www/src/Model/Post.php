@@ -1,6 +1,8 @@
 <?php
 namespace App\Model;
 
+use App\Helpers\Text;
+
 class Post
 {
     private $id;
@@ -54,5 +56,10 @@ class Post
     public function getCreatedAt()
     {
         return new \DateTime($this->created_at);
+    }
+
+    public function getExcerpt(int $lenght): string
+    {
+        return nl2br(htmlentities(TEXT::excerpt($this->getContent(), $lenght)));
     }
 }
