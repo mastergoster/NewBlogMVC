@@ -1,4 +1,5 @@
 <?php
+
 define("GENERATE_TIME_START", microtime(true));
 $basePath = dirname(__dir__) . DIRECTORY_SEPARATOR;
 
