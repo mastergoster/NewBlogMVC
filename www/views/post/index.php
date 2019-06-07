@@ -1,6 +1,5 @@
 <?php
 use App\Model\Post;
-use App\Connection;
 
 $paginatedQuery = new App\PaginatedQuery(
     "SELECT count(id) FROM post",
