@@ -35,12 +35,12 @@ if ($post->getSlug() !== $slug) {
 }
 
 
-$query = $pdo->prepare('
+$query = $pdo->prepare("
 SELECT c.id, c.slug, c.name
 FROM post_category pc
 JOIN category c ON pc.category_id = c.id
 WHERE pc.post_id = :id
-');
+");
 $query->execute([':id' => $post->getId()]);
 $query->setFetchMode(PDO::FETCH_CLASS, Category::class);
 /** @var Category[] */
