@@ -17,7 +17,5 @@ foreach ($categories as $category) {
     $url = $router->url('category', ['id' => $category->getId(), "slug" => $category->getSlug()]);
     echo "<li><a href=\"{$url}\">{$category->getName()}</a></li>";
 }
-?>
-</ul>
-<?php
+echo "</ul>";
 echo $paginatedQuery->getNavHtml();
