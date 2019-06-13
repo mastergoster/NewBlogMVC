@@ -1,6 +1,6 @@
 <?php
 
-define("GENERATE_TIME_START", microtime(true));
+$start = microtime(true);
 $basePath = dirname(__dir__) . DIRECTORY_SEPARATOR;
 
 require_once $basePath . 'vendor/autoload.php';

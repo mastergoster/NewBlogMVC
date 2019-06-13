@@ -30,8 +30,6 @@ class Post
      */
     public function getName()
     {
-        //Hello, World! 
-        //Hello, name!
         return $this->name;
     }
 
