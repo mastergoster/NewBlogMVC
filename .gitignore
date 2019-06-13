@@ -2,4 +2,4 @@
 .vscode
 www/vendor
 www/public/adminer.php
-www/tests/ExoTest
+www/tests/ExoTest/
