@@ -35,4 +35,5 @@ $router->get('/', 'post/index', 'home')
     ->get('/categories', 'category/index', 'categories')
     ->get('/category/[*:slug]-[i:id]', 'category/show', 'category')
     ->get('/article/[*:slug]-[i:id]', 'post/show', 'post')
+    ->get('/test', 'Twig#index', 'test')
     ->run();

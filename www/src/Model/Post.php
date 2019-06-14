@@ -62,4 +62,14 @@ class Post
     {
         return nl2br(htmlentities(TEXT::excerpt($this->getContent(), $lenght)));
     }
+    
+    public function getCategories(): array
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(Category $category): void
+    {
+        $this->categories[] = $category;
+    }
 }

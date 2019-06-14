@@ -47,12 +47,31 @@ $paginatedQuery = new App\PaginatedQuery(
     $uri
 );
 $posts = $paginatedQuery->getItems();
+
+$ids = array_map(function (Post $post) {
+    return $post->getId();
+}, $posts);
+
+$categories = Connection::getPDO()
+->query("SELECT c.*, pc.post_id
+        FROM post_category pc 
+        LEFT JOIN category c on pc.category_id = c.id
+        WHERE post_id IN (" . implode(', ', $ids) . ")")
+->fetchAll(\PDO::FETCH_CLASS, \App\Model\Category::class);
+
+$postById = [];
+foreach ($posts as $post) {
+    $postById[$post->getId()] = $post;
+}
+foreach ($categories as $category) {
+    $postById[$category->post_id]->setCategories($category);
+}
 ?>
 
 
 <section class="row">
     <?php /** @var Post::class $post */
-    foreach ($posts as $post) {
+    foreach ($postById as $post) {
         require dirname(__dir__) . '/post/card.php';
     }
     ?>

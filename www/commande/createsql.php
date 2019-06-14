@@ -69,7 +69,7 @@ for ($i = 0; $i < 50; $i++) {
     echo "|";
 }
 
-for ($i = 0; $i < 50; $i++) {
+for ($i = 0; $i < 5; $i++) {
     $pdo->exec("INSERT INTO category SET
         name='{$faker->sentence(3, false)}',
         slug='{$faker->slug}'");

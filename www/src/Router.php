@@ -31,6 +31,13 @@ class Router
         $router = $this;
         ob_start();
         if (is_array($match)) {
+            if (strpos($match['target'], "#")) {
+                [$controller, $methode] = explode("#", $match['target']);
+                $controller = "App\\Controller\\".ucfirst($controller)."Controller";
+                ob_get_clean();
+                (new $controller())->$methode();
+                exit();
+            }
             $params = $match['params'];
             require $this->pathToFile($match['target']);
         } else {
@@ -38,6 +45,7 @@ class Router
             header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
             require $this->pathToFile("layout/404");
         }
+
         $content = ob_get_clean();
         require $this->pathToFile("layout/default");
     }
