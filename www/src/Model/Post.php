@@ -72,4 +72,14 @@ class Post
     {
         $this->categories[] = $category;
     }
+
+    public function getUrl(): string
+    {
+        return \App\App::getInstance()
+            ->getRouter()
+            ->url('post', [
+                "slug" => $this->getSlug(),
+                "id"=> $this->getId()
+                ]);
+    }
 }

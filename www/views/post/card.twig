@@ -4,16 +4,16 @@
             <h5 class="card-title">{{ post.name }}</h5>
             <p class="card-text">{{ post.getExcerpt(200) | raw }}</p>
             <a class="card-link" href="{{ post.url }}">lire plus</a>
+
         </div>
         <ul class="list-group list-group-flush ">
-            {% for category in post.getCategories() %}
-            <li class="list-group-item bg-light">
-                <a href="#">{{ category.getName() }}</a>
+            {% for category in post.categories %}
+            <li class="list-group-item bg-light"><a href="{{ category.url}}">{{  category.name }}</a>
             </li>
             {% endfor %}
         </ul>
         <div class="card-footer text-muted">
-            {{ post.getCreatedAt() | date('d/m/Y h:i')  }}
+            {{ post.getCreatedAt() | date('d/m/Y h:i') }}
         </div>
     </div>
 </article>

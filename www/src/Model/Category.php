@@ -10,7 +10,7 @@ class Category
 
     private $name;
 
-    public function getID(): int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -23,5 +23,14 @@ class Category
     public function getName(): string
     {
         return $this->name;
+    }
+    public function getUrl(): string
+    {
+        return \App\App::getInstance()
+            ->getRouter()
+            ->url('category', [
+                "slug" => $this->getSlug(),
+                "id"=> $this->getId()
+                ]);
     }
 }
