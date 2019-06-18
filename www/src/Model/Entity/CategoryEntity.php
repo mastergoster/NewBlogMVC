@@ -1,7 +1,7 @@
 <?php
-namespace App\Model;
+namespace App\Model\Entity;
 
-class Category
+class CategoryEntity  extends Entity
 {
 
     private $id;
