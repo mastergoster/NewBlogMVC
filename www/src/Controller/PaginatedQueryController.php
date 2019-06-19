@@ -2,6 +2,8 @@
 //App/Controller/PaginatedQueryController.php
 
 namespace App\Controller;
+use \App\Model\Table\Table;
+use \App\URL;
 
 
 class PaginatedQueryController
@@ -35,9 +37,21 @@ class PaginatedQueryController
         }
         if ($this->items === null) {
             $offset = ($currentPage - 1) * $this->perPage;
-            $statement = $this->pdo->query("{$this->query} LIMIT {$this->perPage}  OFFSET {$offset}");
-            $statement->setFetchMode(\PDO::FETCH_CLASS, $this->classMapping);
-            $this->items = $statement->fetchAll();
+            $this->items = $this->classTable->allByLimit($this->perPage, $offset);
+        }
+        return $this->items;
+    }
+
+    public function getItemsInId(int $id): array
+    {
+        $nbPage = $this->getNbPages($id);
+        $currentPage = $this->getCurrentPage();
+        if ($currentPage > $nbPage) {
+            throw new \Exception('pas de pages');
+        }
+        if ($this->items === null) {
+            $offset = ($currentPage - 1) * $this->perPage;
+            $this->items = $this->classTable->allInIdByLimit($this->perPage, $offset, $id);
         }
         return $this->items;
     }
@@ -83,12 +97,13 @@ HTML;
     }
 
 
-    private function getNbPages(): float
-    {
+    private function getNbPages(?int $id = null): float
+    { 
         if ($this->count === null) {
-            $this->count = $this->pdo
-                ->query($this->queryCount)
-                ->fetch()[0];
+            if($id === null)
+                $this->count = $this->classTable->count()->nbrow;
+            else 
+                $this->count = $this->classTable->countByid($id)->nbrow;
         }
         return ceil($this->count / $this->perPage);
     }
