@@ -2,4 +2,6 @@
 namespace Core\Model;
 
 class Entity
-{ }
+{
+ 
+}
