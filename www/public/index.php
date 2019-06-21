@@ -11,6 +11,6 @@ $app->getRouter($basePath)
     ->get('/', 'Post#all', 'home')
     ->get('/categories', 'Category#all', 'categories')
     ->get('/category/[*:slug]-[i:id]', 'Category#show', 'category')
-    ->get('/article/[*:slug]-[i:id]', 'post/show', 'post')
+    ->get('/article/[*:slug]-[i:id]', 'post#show', 'post')
     ->get('/test', 'Twig#index', 'test')
     ->run();

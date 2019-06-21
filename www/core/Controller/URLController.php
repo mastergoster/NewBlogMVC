@@ -1,7 +1,7 @@
 <?php
-namespace App;
+namespace Core\Controller;
 
-class URL
+class URLController
 {
     public static function getInt(string $name, ?int $default = null): ?int
     {

@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace Core\Controller;
 
 class RouterController
 {
@@ -28,13 +28,14 @@ class RouterController
     public function run(): void
     {
         $match = $this->router->match();
-  
+
         if (is_array($match)) {
             if (strpos($match['target'], "#")) {
                 [$controller, $methode] = explode("#", $match['target']);
-                $controller = "App\\Controller\\".ucfirst($controller)."Controller";
+                $controller = "App\\Controller\\" . ucfirst($controller) . "Controller";
                 //try{
-                    (new $controller())->$methode($match['params']);
+
+                (new $controller())->$methode(...array_values($match['params']));
                 //}catch(\Exception $e){
                 //    header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
                 //    exit();

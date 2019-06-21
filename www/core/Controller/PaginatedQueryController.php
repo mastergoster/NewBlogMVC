@@ -1,14 +1,12 @@
 <?php
-//App/Controller/PaginatedQueryController.php
 
-namespace App\Controller;
-use \App\Model\Table\Table;
-use \App\URL;
+namespace Core\Controller;
 
+use \Core\Model\Table;
 
 class PaginatedQueryController
 {
-	private $classTable;
+    private $classTable;
 
     private $url;
 
@@ -74,36 +72,20 @@ class PaginatedQueryController
         return $navArray;
     }
 
-    public function getNavHtml(): string
+    protected function getCurrentPage(): int
     {
-        $urls = $this->getNav();
-        $html = "";
-        foreach ($urls as $key => $url) {
-            $class = $this->getCurrentPage() == $key ? " active" : "";
-            $html .= "<li class=\"page-item {$class}\"><a class=\"page-link\" href=\"{$url}\">{$key}</a></li>";
-        }
-        return <<<HTML
-        <nav class="Page navigation">
-            <ul class="pagination justify-content-center">
-                {$html}
-            </ul>
-        </nav>
-HTML;
-    }
-
-    private function getCurrentPage(): int
-    {
-        return URL::getPositiveInt('page', 1);
+        return URLController::getPositiveInt('page', 1);
     }
 
 
     private function getNbPages(?int $id = null): float
-    { 
+    {
         if ($this->count === null) {
-            if($id === null)
+            if ($id === null) {
                 $this->count = $this->classTable->count()->nbrow;
-            else 
+            } else {
                 $this->count = $this->classTable->countByid($id)->nbrow;
+            }
         }
         return ceil($this->count / $this->perPage);
     }
