@@ -1,10 +1,10 @@
 <?php
 namespace App\Controller;
 
-use \App\Model\Entity\PostEntity;
-use \App\Model\Entity\CategoryEntity;
+use \Core\Controller\Controller;
 
-class PostController extends Controller{
+class PostController extends Controller
+{
 
     public function __construct()
     {
@@ -14,25 +14,26 @@ class PostController extends Controller{
 
     public function all()
     {
-        $paginatedQuery = new PaginatedQueryController(
+        $paginatedQuery = new PaginatedQueryAppController(
             $this->post,
             $this->generateUrl('home')
         );
-        
+
         $postById = $paginatedQuery->getItems();
 
         $title = 'Mon Super MEGA blog';
-        $this->render('post/all', 
-        [
-            "title" => $title,
-            "posts" => $postById,
-            "paginate" => $paginatedQuery->getNavHtml()
-        ]);
+        $this->render(
+            'post/all',
+            [
+                "title" => $title,
+                "posts" => $postById,
+                "paginate" => $paginatedQuery->getNavHtml()
+            ]
+        );
     }
 
-    public function show(Array $params) {
-        $id = (int)$params['id'];
-        $slug = $params['slug'];
+    public function show(string $slug, int $id)
+    {
 
         $post = $this->post->find($id);
 
@@ -41,7 +42,6 @@ class PostController extends Controller{
         }
 
         if ($post->getSlug() !== $slug) {
-
             $url = $this->generateUrl('post', ['id' => $id, 'slug' => $post->getSlug()]);
 
             http_response_code(301);
@@ -54,11 +54,12 @@ class PostController extends Controller{
         $title = "article : " . $post->getName();
 
         $this->render(
-            "post/show", 
+            "post/show",
             [
                 "title" => $title,
                 "categories" => $categories,
                 "post" => $post
-            ]);
+            ]
+        );
     }
 }

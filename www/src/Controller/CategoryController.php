@@ -1,23 +1,23 @@
 <?php
 namespace App\Controller;
 
-use App\Model\Entity \ {
-    CategoryEntity,
-    PostEntity
-};
+use \Core\Controller\Controller;
 
-use App\Controller\PaginatedQueryController;
 
-class CategoryController extends Controller{
+use App\Controller\PaginatedQueryAppController;
 
-    function __construct() {
+class CategoryController extends Controller
+{
+
+    public function __construct()
+    {
         $this->loadModel('category');
         $this->loadModel('post');
     }
     public function all()
     {
 
-        $paginatedQuery = new PaginatedQueryController(
+        $paginatedQuery = new PaginatedQueryAppController(
             $this->category,
             $this->generateUrl('categories')
         );
@@ -28,19 +28,15 @@ class CategoryController extends Controller{
         $this->render(
             "category/all",
             [
-            "title" => $title,
-            "categories" => $categories,
-            "paginate" => $paginatedQuery->getNavHTML()
-            ]);
-        
+                "title" => $title,
+                "categories" => $categories,
+                "paginate" => $paginatedQuery->getNavHTML()
+            ]
+        );
     }
 
-    public function show(array $params)
+    public function show(string $slug, int $id)
     {
-        $id = (int)$params['id'];
-        $slug = $params['slug'];
-
-
         $category = $this->category->find($id);
 
         if (!$category) {
@@ -58,7 +54,7 @@ class CategoryController extends Controller{
 
         $uri = $this->generateUrl("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
 
-        $paginatedQuery = new PaginatedQueryController(
+        $paginatedQuery = new PaginatedQueryAppController(
             $this->post,
             $uri
         );
@@ -71,6 +67,7 @@ class CategoryController extends Controller{
                 "title" => $title,
                 "posts" => $postById,
                 "paginate" => $paginatedQuery->getNavHTML()
-            ]);
+            ]
+        );
     }
 }

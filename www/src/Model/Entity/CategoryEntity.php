@@ -1,7 +1,9 @@
 <?php
 namespace App\Model\Entity;
 
-class CategoryEntity  extends Entity
+use Core\Model\Entity;
+
+class CategoryEntity extends Entity
 {
 
     private $id;
@@ -30,7 +32,7 @@ class CategoryEntity  extends Entity
             ->getRouter()
             ->url('category', [
                 "slug" => $this->getSlug(),
-                "id"=> $this->getId()
-                ]);
+                "id" => $this->getId()
+            ]);
     }
 }
