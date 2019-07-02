@@ -1,5 +1,6 @@
 .env
 .vscode
+.DS_Store
 www/vendor
 www/composer.lock
 www/public/adminer.php

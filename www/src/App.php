@@ -32,6 +32,8 @@ class App
             $whoops = new \Whoops\Run;
             $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
             $whoops->register();
+            define('TVA', 1.2);
+            session_start();
         }
 
         $numPage = URLController::getPositiveInt('page');

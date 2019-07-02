@@ -1,0 +1,109 @@
+{% extends 'layout/default_beer.twig' %}
+
+{% block body %}
+<div class="command container">
+    <h1 class="h1 mt-5">Informations complémentaire</h1>
+    <section class="commandSection">
+        {% if session.error %}
+            <div class="col-12 text-center alert alert-danger">
+                {{ session.error }}
+            </div>
+        {% endif %}
+        <form method="POST" action="" class="row">
+            <article class="form col-12 col-sm-6">
+                <div class="form_row">
+                    <div class="form-group">
+                        <label>NOM</label>
+                        <input type="text" class="form-control" name="lastname" value="{{ session.user.lastname }}"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label>PRENOM</label>
+                        <input type="text" class="form-control" name="firstname" value="{{ session.user.firstname }}"
+                            required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>ADRESSE</label>
+                    <input type="text" class="form-control" name="address" value="{{ session.user.address }}"
+                        required />
+                </div>
+                <div class="form_row">
+                    <div class="form-group">
+                        <label>Code Postal</label>
+                        <input type="text" class="form-control" name="zipCode" value="{{ session.user.zipCode }}"
+                            required />
+                    </div>
+                    <div class="form-group">
+                        <label>VILLE</label>
+                        <input type="text" class="form-control" name="city" value="{{ session.user.city }}" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>PAYS</label>
+                    <input type="text" class="form-control" name="country" value="{{ session.user.country }}"
+                        required />
+                </div>
+                <div class="form_row">
+                    <div class="form-group">
+                        <label>TEL</label>
+                        <input type="tel" class="form-control" name="phone" value="{{ session.user.phone }}" required />
+                    </div>
+                    <div class="form-group">
+                        <label>MAIL</label>
+                        <input type="text" class="form-control" name="mail" value="{{ session.user.mail }}" disabled />
+                    </div>
+                </div>
+            </article>
+            <article class="productsTable col-12 col-sm-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nomination</th>
+                            <th scope="col" class="text-center">Quantité</th>
+                            <th scope="col" class="text-center">ligne totale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td scope="col" class="cartImgRow">
+                                {#<img class="w-25" src="{{ product.img }}" alt="{{ product.title }}">#}#</td>
+                            <td scope="col">{{ product.title }}</td>
+                            <td scope="col" class="text-center">{{ product.qty }}</td>
+                            <td scope="col" class="text-center">{{ product.lineTotale| number_format(2, ',', '.') }}€
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="text-center"><strong>Prix Totale Hors Taxes</strong></td>
+                            <td class="text-center">{{ priceTotalHT| number_format(2, ',', '.') }}€</td>
+                        </tr>
+                        <tr>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="text-center"><strong>TVA 20%</strong></td>
+                            <td class="text-center">{{ (priceTotalHT*0.2)| number_format(2, ',', '.') }}€</td>
+                        </tr>
+                        <tr>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="text-center"><strong>Prix Totale TTC</strong></td>
+                            <td class="text-center">{{ (priceTotalHT*constant.TVA)| number_format(2, ',', '.') }}€</td>
+                        </tr>
+                        <tr>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="text-center"><button class="btn btn-primary" type="submit">Accéder au paiement</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </article>
+        </form>
+    </section>
+</div>
+{% endblock %}

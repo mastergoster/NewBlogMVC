@@ -26,9 +26,56 @@ class Table
         return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table}", null, true, null);
     }
 
+    public function last()
+    {
+        return $this->query("SELECT MAX(id) as lastId FROM {$this->table}", null, true)->lastId;
+    }
+
     public function find($id)
     {
         return $this->query("SELECT * FROM {$this->table} WHERE id=?", [$id], true);
+    }
+
+    public function all() {
+        return $this->query("SELECT * FROM $this->table");
+    }
+
+    public function update($id, $column, $fields){
+        $sql_parts = [];
+        $attributes = [];
+        foreach($fields as $k => $v){
+            $sql_parts[] = "$k = ?";
+            $attributes[] = $v;
+        }
+        $attributes[] = $id;
+        $sql_part = implode(', ', $sql_parts);
+        return $this->query("UPDATE {$this->table} SET $sql_part WHERE $column = ?", $attributes, true);
+    }
+
+    public function delete($id){
+        return $this->query("DELETE FROM {$this->table} WHERE id = ?", [$id], true);
+    }
+
+    public function create($fields, $class=false){
+        $sql_parts = [];
+        $attributes = [];
+        if($class) {
+            $methods = get_class_methods($fields);
+            $array = [];
+            foreach($methods as $value) {
+                if(strrpos($value, 'get') === 0) {
+                    $column = strtolower(explode('get', $value)[1]);
+                    $array[$column] = $fields->$value();
+                }                
+            }
+            $fields = $array;
+        }
+        foreach($fields as $k => $v){
+            $sql_parts[] = "$k = ?";
+            $attributes[] = $v;
+        }
+        $sql_part = implode(', ', $sql_parts);
+        return $this->query("INSERT INTO {$this->table} SET $sql_part", $attributes, true);
     }
 
     public function query(string $statement, ?array $attributes = null, bool $one = false, ?string $class_name = null)

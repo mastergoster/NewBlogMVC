@@ -1,0 +1,63 @@
+{% extends 'layout/default_beer.twig' %}
+
+{% block body %}
+<section class="cart container">
+    <h1 class="h1 mt-5">CONFIRMATION DE COMMANDE</h1>
+    <div class="productsTable">
+        {% if session.error %}
+        <div class="col-12 text-center alert alert-danger">
+            {{ session.error| raw }}
+        </div>
+        {% endif %}
+        {% if session.success %}
+        <div class="col-12 text-center alert alert-success">
+            {{ session.success| raw }}
+        </div>
+        {% endif %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nomination</th>
+                    <th scope="col" class="text-center">Quantité</th>
+                    <th scope="col" class="text-center">Prix unitaire HT</th>
+                    <th scope="col" class="text-center">ligne totale</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td scope="col" class="cartImgRow">
+                        {#<img class="w-25" src="{{ product.img }}" alt="{{ product.title }}">#}#</td>
+                    <td scope="col">{{ product.title }}</td>
+                    <td scope="col" class="text-center">{{ product.qty }}</td>
+                    <td scope="col" class="text-center">{{ product.price| number_format(2, ',', '.') }}€</td>
+                    <td scope="col" class="text-center">{{ product.lineTotale| number_format(2, ',', '.') }}€</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td class="border-0"></td>
+                    <td class="border-0"></td>
+                    <td class="text-center border-0"></td>
+                    <td class="text-center"><strong>Prix Totale Hors Taxes</strong></td>
+                    <td class="text-center">{{ priceTotalHT| number_format(2, ',', '.') }}€</td>
+                </tr>
+                <tr>
+                    <td class="border-0"></td>
+                    <td class="border-0"></td>
+                    <td class="text-center border-0"></td>
+                    <td class="text-center"><strong>TVA 20%</strong></td>
+                    <td class="text-center">{{ (priceTotalHT*0.2)| number_format(2, ',', '.') }}€</td>
+                </tr>
+                <tr>
+                    <td class="border-0"></td>
+                    <td class="border-0"></td>
+                    <td class="text-center border-0"></td>
+                    <td class="text-center"><strong>Prix Totale TTC</strong></td>
+                    <td class="text-center">{{ (priceTotalHT*constant.TVA)| number_format(2, ',', '.') }}€</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
