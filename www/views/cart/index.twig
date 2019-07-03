@@ -1,0 +1,65 @@
+{% extends 'layout/default_beer.twig' %}
+
+{% block body %}
+<section class="cart container">
+    {% if products| length > 0%}
+        <h1 class="h1 mt-5">Mon panier</h1>
+        <div class="productsTable">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nomination</th>
+                        <th scope="col" class="text-center">Quantité</th>
+                        <th scope="col" class="text-center">Prix unitaire HT</th>
+                        <th scope="col" class="text-center">ligne totale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr id="line_{{ product.id }}">
+                        <td scope="col" class="cartImgRow">{#<img class="w-25" src="{{ product.img }}" alt="{{ product.title }}">#}<i class="fa fa-trash" onclick="deleteCartLine({{ product.id }});"></i></td>
+                        <td scope="col">{{ product.title }}</td>
+                        <td scope="col" class="text-center"><input class="w-25" type='number' min='1' value='{{ product.qty }}' oninput="calcPrice(this, {{ product.IdBeer }}, {{ product.price }}, {{ product.id }});"/></td>
+                        <td scope="col" id="PHT_{{ product.IdBeer }}" class="text-center">{{ product.price| number_format(2, ',', '.') }}€</td>
+                        <td scope="col" id="PTTC_{{ product.IdBeer }}" class="text-center HT">{{ product.lineTotale| number_format(2, ',', '.') }}€</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td class="border-0"></td>
+                        <td class="border-0"></td>
+                        <td class="text-center border-0"></td>
+                        <td class="text-center"><strong>Prix Totale Hors Taxes</strong></td>
+                        <td class="text-center" id="PTHT">{{ priceTotalHT| number_format(2, ',', '.') }}€</td>
+                    </tr>
+                    <tr>
+                        <td class="border-0"></td>
+                        <td class="border-0"></td>
+                        <td class="text-center border-0"></td>
+                        <td class="text-center"><strong>TVA 20%</strong></td>
+                        <td class="text-center" id="TVA">{{ (priceTotalHT*0.2)| number_format(2, ',', '.') }}€</td>
+                    </tr>
+                    <tr>
+                        <td class="border-0"></td>
+                        <td class="border-0"></td>
+                        <td class="text-center border-0"></td>
+                        <td class="text-center"><strong>Prix Totale TTC</strong></td>
+                        <td class="text-center" id="PTTTC">{{ (priceTotalHT*constant.TVA)| number_format(2, ',', '.') }}€</td>
+                    </tr>
+                    <tr>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="border-0"></td>
+                            <td class="text-center"><a href="/command/validation" class="btn btn-primary">Validation du panier</a></td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <article class="d-flex justify-content-center align-items-center" style="height: 80vh">
+            <h1 class="jumbotron">Votre panier est vide</h1>
+        </article>
+    {% endif %}
+</section>
+{% endblock %}

@@ -23,6 +23,8 @@ class Controller
         if (is_null($this->twig)) {
             $loader = new \Twig\Loader\FilesystemLoader(dirname(dirname(__dir__)) . '/views/');
             $this->twig = new \Twig\Environment($loader);
+            $this->twig->addGlobal('session', $_SESSION);
+            $this->twig->addGlobal('constant', get_defined_constants());
         }
         return $this->twig;
     }
